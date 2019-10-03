@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="160dp">
+
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/QuestHeroGIF"
+        android:layout_width="80dp"
+        android:layout_height="140dp"
+        android:layout_weight="1"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.021"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.2"
+        app:srcCompat="?attr/actionModeSplitBackground" />
+
+    <Button
+        android:id="@+id/QuestHeroEnhanceDP"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:text="DP+0"
+        app:layout_constraintBottom_toBottomOf="@+id/QuestHeroInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/QuestHeroEnhanceAP"
+        app:layout_constraintTop_toBottomOf="@+id/QuestHeroEnhanceAP"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/QuestHeroEnhanceAP"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_weight="1"
+        android:clickable="false"
+        android:text="AP+0"
+        app:layout_constraintBottom_toBottomOf="@+id/QuestHeroInfo"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/QuestHeroInfo"
+        app:layout_constraintTop_toTopOf="@+id/QuestHeroInfo"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/isOnQuest"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_marginStart="10dp"
+        android:layout_marginLeft="10dp"
+        android:text="pick"
+        app:layout_constraintBottom_toBottomOf="@+id/QuestHeroEnhanceDP"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/QuestHeroEnhanceDP"
+        app:layout_constraintTop_toTopOf="@+id/QuestHeroEnhanceDP"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/QuestHeroInfo"
+        android:layout_width="150dp"
+        android:layout_height="140dp"
+        android:layout_weight="1"
+        android:text=""
+        android:textColor="#000000"
+        app:layout_constraintBottom_toBottomOf="@+id/QuestHeroGIF"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.08"
+        app:layout_constraintStart_toEndOf="@+id/QuestHeroGIF"
+        app:layout_constraintTop_toTopOf="@+id/QuestHeroGIF"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <View
+        android:id="@+id/divider2"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="?android:attr/listDivider"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.987" />
+
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

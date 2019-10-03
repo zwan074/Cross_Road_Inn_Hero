@@ -8,73 +8,169 @@
     tools:context=".MainActivity">
 
 
+    <Button
+        android:id="@+id/inn_boss"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:background="#00000000"
+        app:layout_constraintBottom_toBottomOf="@+id/inn_boss_gifImageView"
+        app:layout_constraintStart_toStartOf="@+id/inn_boss_gifImageView"
+        app:layout_constraintTop_toTopOf="@+id/inn_boss_gifImageView"
+        app:layout_constraintVertical_bias="0.0" />
 
+    <Button
+        android:id="@+id/Door"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:text="Door"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.749"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.046"
+        tools:visibility="visible" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+    <Button
+        android:id="@+id/pos1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:text="pos1"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.337"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.095"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/pos2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:text="pos2"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toTopOf="@+id/pos4"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.767"
+        app:layout_constraintStart_toEndOf="@+id/pos3"
+        app:layout_constraintTop_toBottomOf="@+id/Door"
+        app:layout_constraintVertical_bias="0.586"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/pos3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:clickable="false"
+        android:text="pos3"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.167"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toBottomOf="@+id/pos1"
+        app:layout_constraintVertical_bias="0.41"
+        tools:visibility="visible" />
+
+    <Button
+        android:id="@+id/pos4"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="pos4"
+
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.848"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.877"
+        tools:visibility="visible" />
+
+    <SurfaceView
+        android:id="@+id/cross_road_inn"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:foreground="@drawable/cross_road_inn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.733">
+        app:layout_constraintVertical_bias="0.0" />
 
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
+    <ImageView
+        android:id="@+id/goldIcon"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.145"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.021"
+        app:srcCompat="@drawable/gold_icon" />
 
+    <TextView
+        android:id="@+id/totalHeroHired"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Total Hero:"
+        android:textColor="#FF1744"
+        app:layout_constraintBottom_toBottomOf="@+id/Gold"
+        app:layout_constraintEnd_toEndOf="@+id/Gold"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/goldIcon"
+        app:layout_constraintTop_toBottomOf="@+id/goldIcon"
+        app:layout_constraintVertical_bias="0.0" />
 
-            <Button
-                android:id="@+id/inn_boss"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:background="#00000000"
-                app:layout_constraintBottom_toBottomOf="@+id/inn_boss_gifImageView"
-                app:layout_constraintStart_toStartOf="@+id/inn_boss_gifImageView"
-                app:layout_constraintTop_toTopOf="@+id/inn_boss_gifImageView"
-                app:layout_constraintVertical_bias="0.0" />
+    <TextView
+        android:id="@+id/Gold"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Gold"
+        android:textColor="#FF1744"
+        app:layout_constraintBottom_toBottomOf="@+id/goldIcon"
+        app:layout_constraintEnd_toStartOf="@+id/pos1"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toEndOf="@+id/goldIcon"
+        app:layout_constraintTop_toTopOf="@+id/goldIcon" />
 
-            <ImageView
-                android:id="@+id/cross_road_inn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:soundEffectsEnabled="false"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="1.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintVertical_bias="0.0"
-                app:srcCompat="@drawable/cross_road_inn" />
+    <pl.droidsonroids.gif.GifImageView
+        android:id="@+id/inn_boss_gifImageView"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:src="@drawable/inn_boss"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.185"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.276" />
 
-            <TextView
-                android:id="@+id/Gold"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Gold"
-                android:textColor="#FFC400"
-                app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
-                app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
-                app:layout_constraintHorizontal_bias="0.793"
-                app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
-                app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
-                app:layout_constraintVertical_bias="0.193" />
-
-            <pl.droidsonroids.gif.GifImageView
-                android:id="@+id/inn_boss_gifImageView"
-                android:layout_width="40dp"
-                android:layout_height="50dp"
-                android:src="@drawable/inn_boss"
-                app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
-                app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
-                app:layout_constraintHorizontal_bias="0.186"
-                app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
-                app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
-                app:layout_constraintVertical_bias="0.361" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </ScrollView>
-
-
-
+    <ImageButton
+        android:id="@+id/questBook"
+        android:layout_width="40dp"
+        android:layout_height="50dp"
+        android:padding="0dp"
+        android:paddingLeft="0dp"
+        android:paddingTop="0dp"
+        android:paddingRight="0dp"
+        android:paddingBottom="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="@+id/cross_road_inn"
+        app:layout_constraintEnd_toEndOf="@+id/cross_road_inn"
+        app:layout_constraintHorizontal_bias="0.247"
+        app:layout_constraintStart_toStartOf="@+id/cross_road_inn"
+        app:layout_constraintTop_toTopOf="@+id/cross_road_inn"
+        app:layout_constraintVertical_bias="0.399"
+        app:srcCompat="@drawable/quest_book1"
+        tools:visibility="visible" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

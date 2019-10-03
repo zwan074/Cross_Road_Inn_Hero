@@ -2,12 +2,12 @@ package com.example.assignment3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.graphics.Color;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
@@ -46,120 +46,129 @@ public class CrossRoadInnRoomsAdapter extends RecyclerView.Adapter<CrossRoadInnR
     // Replace the contents of a view (invoked by the layout manager)
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
         final Hero heroSelected = heroHired.get(position);
+
+        switch (heroSelected.getHeroRarity()) {
+            case NORMAL: holder.layout.setBackgroundColor(Color.parseColor("#CCDDD1C6"));;break;
+            case ELITE : holder.layout.setBackgroundColor(Color.parseColor("#CC00E5FF"));break;
+            case LEGENDARY : holder.layout.setBackgroundColor(Color.parseColor("#CCFF9100"));break;
+        }
 
         GifImageView gifImageView = holder.layout.findViewById(R.id.HeroGIF);
         gifImageView.setImageResource(heroSelected.getHeroGifID());
 
-        TextView heroInfo = (TextView) holder.layout.findViewById(R.id.HeroInfo);
-        heroInfo.append("Hero Rarity: " + heroSelected.getHeroRarity()+ "\n");
-        heroInfo.append("Hero Name: " + heroSelected.getHeroName()+ "\n");
-        heroInfo.append("Hero Class: " + heroSelected.getHeroClass()+ "\n");
-        heroInfo.append("Hero Lvl: " + heroSelected.getLevel()+ "\n");
-        heroInfo.append("Hero Skill: " + heroSelected.getHeroSkill()+ "\n");
-        heroInfo.append("Hero AP: " + heroSelected.getHeroAttackPower()+ "\n");
-        heroInfo.append("Hero DP: " + heroSelected.getHeroDefencePower()+ "\n");
-        heroInfo.append("Hero EXP: " + heroSelected.getExp());
+        final TextView heroInfo = holder.layout.findViewById(R.id.HeroInfo);
+        heroInfo.setText(
+                "Rarity: " + heroSelected.getHeroRarity()+ "\n" +
+                "Name: " + heroSelected.getHeroName()+ "\n" +
+                "Class: " + heroSelected.getHeroClass()+ "\n" +
+                "Lvl: " + heroSelected.getLevel()+ "\n" +
+                "Skill: " + heroSelected.getHeroSkill()+ "\n" +
+                "AP: " + heroSelected.getHeroAttackPower()+ "\n" +
+                "DP: " + heroSelected.getHeroDefencePower()+ "\n" +
+                "EXP: " + heroSelected.getExp()
+        );
 
-        Button fireHero = (Button) holder.layout.findViewById(R.id.fireHero);
-        fireHero.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                heroHired.remove(position);
-                MainActivity m = (MainActivity) activity;
-                TextView totalHeroHired = (TextView)  m.findViewById(R.id.totalHeroHired);
-                totalHeroHired.setText("Total Heros : " +  heroHired.size());
-
-                TextView totalGold = (TextView)  m.findViewById(R.id.totalGold);
-                totalGold.setText("Gold : " +  m.getGoldAmount());
-
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position,heroHired.size());
-
-            }
-        });
-
-        final Button heroAP = (Button) holder.layout.findViewById(R.id.enhanceAP);
+        final Button heroAP = holder.layout.findViewById(R.id.enhanceAP);
         heroAP.setText("AP+" +heroSelected.getHeroAttackPowerEnhancement());
-        heroAP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        heroAP.setOnClickListener(view -> {
 
-                MainActivity m = (MainActivity) activity;
-                AlertDialog.Builder dialog = new AlertDialog.Builder(m);
-
-                if ( m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroAttackPowerEnhancement(),2) >=0){
-                    if (Math.random() > 0.5 ){
-                        m.setGoldAmount(
-                            m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroAttackPowerEnhancement(), 2)
-                        );
-                        heroSelected.setHeroAttackPowerEnhancement(heroSelected.getHeroAttackPowerEnhancement()+1);
-                        heroAP.setText("AP+" +heroSelected.getHeroAttackPowerEnhancement());
-                        dialog.setMessage("Success Enhance AP").create().show();
-                    }
-                    else {
-                        m.setGoldAmount(
-                                m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroAttackPowerEnhancement(), 2)
-                        );
-                        dialog.setMessage("Fail Enhance AP").create().show();
-                    }
+            MainActivity m = (MainActivity) activity;
+            AlertDialog.Builder dialog = new AlertDialog.Builder(m);
+            int cost = (int) Math.pow(heroSelected.getHeroAttackPowerEnhancement(),2);
+            if ( m.getGoldAmount() - cost >=0){
+                if (Math.random() > 0.5 ){
+                    m.setGoldAmount(
+                        m.getGoldAmount() - cost
+                    );
+                    heroSelected.setHeroAttackPowerEnhancement(heroSelected.getHeroAttackPowerEnhancement()+1);
+                    heroAP.setText("AP+" +heroSelected.getHeroAttackPowerEnhancement());
+                    dialog.setMessage("Success Enhance AP and cost " + cost + " GOLD").create().show();
                 }
                 else {
-                    dialog.setMessage("Not Enough Gold").create().show();
+                    m.setGoldAmount(
+                            m.getGoldAmount() - cost
+                    );
+                    dialog.setMessage("Fail Enhance AP and cost " + cost + " GOLD").create().show();
                 }
-
-                TextView totalGold = (TextView)  m.findViewById(R.id.totalGold);
-                totalGold.setText("Gold : " +  m.getGoldAmount());
-
-                TextView Gold = (TextView) m.findViewById(R.id.Gold) ;
-                Gold.setText ("Gold : " +  m.getGoldAmount());
-
-
             }
+            else {
+                dialog.setMessage("Not Enough Gold, need " + cost + " GOLD for upgrading").create().show();
+            }
+
+            TextView totalGold = (TextView)  m.findViewById(R.id.Gold);
+            totalGold.setText("Gold : " +  m.getGoldAmount());
+
+
+
         });
 
-        final Button heroDP = (Button) holder.layout.findViewById(R.id.enhanceDP);
+        final Button heroDP = holder.layout.findViewById(R.id.enhanceDP);
         heroDP.setText("DP+" +heroSelected.getHeroDefencePowerEnhancement());
-        heroDP.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+        heroDP.setOnClickListener(view -> {
+
+            MainActivity m = (MainActivity) activity;
+            AlertDialog.Builder dialog = new AlertDialog.Builder(m);
+            int cost = (int) Math.pow(heroSelected.getHeroDefencePowerEnhancement(),2);
+            if ( m.getGoldAmount() - cost >=0){
+                if (Math.random() > 0.5 ){
+                    m.setGoldAmount(
+                        m.getGoldAmount() - cost
+                    );
+                    heroSelected.setHeroDefencePowerEnhancement(heroSelected.getHeroDefencePowerEnhancement()+1);
+                    heroDP.setText("DP+" +heroSelected.getHeroDefencePowerEnhancement());
+                    dialog.setMessage("Success Enhance DP and cost " + cost + " GOLD").create().show();
+                }
+                else {
+                    m.setGoldAmount(
+                        m.getGoldAmount() - cost
+                    );
+                    dialog.setMessage("Fail Enhance DP and cost " + cost + " GOLD").create().show();
+                }
+            }
+            else {
+                dialog.setMessage("Not Enough Gold, need " + cost + " GOLD for upgrading" ).create().show();
+            }
+
+            TextView totalGold = m.findViewById(R.id.Gold);
+            totalGold.setText("Gold : " +  m.getGoldAmount());
+
+
+
+        });
+
+
+        Button fireHero = holder.layout.findViewById(R.id.fireHero);
+        if (!heroSelected.isOnQuest()) {
+            fireHero.setOnClickListener(view -> {
+
 
                 MainActivity m = (MainActivity) activity;
                 AlertDialog.Builder dialog = new AlertDialog.Builder(m);
 
-                if ( m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroDefencePowerEnhancement(),2) >=0){
-                    if (Math.random() > 0.5 ){
-                        m.setGoldAmount(
-                            m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroDefencePowerEnhancement(), 2)
-                        );
-                        heroSelected.setHeroDefencePowerEnhancement(heroSelected.getHeroDefencePowerEnhancement()+1);
-                        heroDP.setText("DP+" +heroSelected.getHeroDefencePowerEnhancement());
-                        dialog.setMessage("Success Enhance DP").create().show();
-                    }
-                    else {
-                        m.setGoldAmount(
-                            m.getGoldAmount() - (int) Math.pow(heroSelected.getHeroDefencePowerEnhancement(), 2)
-                        );
-                        dialog.setMessage("Fail Enhance DP").create().show();
-                    }
-                }
-                else {
-                    dialog.setMessage("Not Enough Gold").create().show();
+                heroInfo.setText("");
+                if (heroHired.size() > 0) {
+                    heroHired.remove(position);
+                    TextView totalHeroHired = (TextView) m.findViewById(R.id.totalHeroHired);
+                    totalHeroHired.setText("Total Heroes : " + heroHired.size());
+
+                    TextView totalGold = (TextView) m.findViewById(R.id.Gold);
+                    totalGold.setText("Gold : " + m.getGoldAmount());
+                    dialog.setMessage(heroSelected.getHeroName() + "has been fired").create().show();
+                    notifyItemRemoved(position);
+                    notifyItemRangeChanged(position, getItemCount());
+
                 }
 
-                TextView totalGold = (TextView)  m.findViewById(R.id.totalGold);
-                totalGold.setText("Gold : " +  m.getGoldAmount());
-
-                TextView Gold = (TextView) m.findViewById(R.id.Gold) ;
-                Gold.setText ("Gold : " +  m.getGoldAmount());
-
-
-            }
-        });
-
-
+            });
+        }
+        else {
+            fireHero.setText("On Quest");
+            fireHero.setClickable(false);
+            heroAP.setClickable(false);
+            heroDP.setClickable(false);
+        }
 
 
     }

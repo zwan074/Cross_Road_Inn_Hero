@@ -1,18 +1,25 @@
 package com.example.assignment3;
 
-import android.app.Fragment;
+import android.app.AlertDialog;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.ColorInt;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
 
 import com.example.assignment3.HeroObjects.Hero;
 import com.example.assignment3.HeroObjects.HeroRarity;
+
+import static com.example.assignment3.HeroObjects.HeroRarity.NORMAL;
 
 
 public class SingleHeroInLobbyFragment extends Fragment {
@@ -37,10 +44,10 @@ public class SingleHeroInLobbyFragment extends Fragment {
         hero  = (Hero) getArguments().getSerializable(DESCRIBABLE_KEY);
         view = inflater.inflate(R.layout.single_hero_in_lobby, container, false);
 
-        TextView heroInfo = (TextView) view.findViewById(R.id.hero_info);
-        ImageButton closeButton = (ImageButton) view.findViewById(R.id.close_single_hero_in_lobby);
-        Button hireButton = (Button) view.findViewById(R.id.hire);
-        TextView goldToHire = (TextView) view.findViewById(R.id.GoldToHire);
+        TextView heroInfo = view.findViewById(R.id.hero_info);
+        ImageButton closeButton = view.findViewById(R.id.close_single_hero_in_lobby);
+        Button hireButton =  view.findViewById(R.id.hire);
+        TextView goldToHire = view.findViewById(R.id.GoldToHire);
 
         heroInfo.append("Hero Rarity: " + hero.getHeroRarity()+ "\n");
         heroInfo.append("Hero Name: " + hero.getHeroName()+ "\n");
@@ -52,9 +59,9 @@ public class SingleHeroInLobbyFragment extends Fragment {
 
 
         switch (hero.getHeroRarity()) {
-            case NORMAL: goldToHire.setText("Gold : 10"  );break;
-            case ELITE : goldToHire.setText("Gold : 100"  );break;
-            case LEGENDARY: goldToHire.setText("Gold : 1000"  );break;
+            case NORMAL: heroInfo.setBackgroundColor(Color.parseColor("#CCDDD1C6"));goldToHire.setText("Gold : 20"  );break;
+            case ELITE : heroInfo.setBackgroundColor(Color.parseColor("#CC00E5FF"));goldToHire.setText("Gold : 100"  );break;
+            case LEGENDARY : heroInfo.setBackgroundColor(Color.parseColor("#CCFF9100"));goldToHire.setText("Gold : 500"  );break;
         }
 
 
@@ -83,22 +90,67 @@ public class SingleHeroInLobbyFragment extends Fragment {
                 public void onClick(View v) {
 
                     MainActivity m = (MainActivity) getActivity();
+                    AlertDialog.Builder dialog = new AlertDialog.Builder(m);
+                    if ( m.herosHired.size() < 10) {
+                        if (hero.getHeroRarity() == NORMAL) {
+                            if ( m.GoldAmount >= 20) {
+                                m.GoldAmount -= 20;
+                                hireHero (m);
+                                dialog.setMessage("A " + hero.getHeroRarity() + " hero hired and cost 20 GOLD").create().show();
+                            }
+                            else {
+                                dialog.setMessage("Not Enough Gold").create().show();
 
-                    if (hero.getHeroRarity() == HeroRarity.ELITE && m.GoldAmount >= 100) {
-                        m.herosHired.add(hero);
-                        m.GoldAmount -= 100;
-                        TextView Gold = (TextView) m.findViewById(R.id.Gold) ;
-                        Gold.setText("Gold : " + m.GoldAmount);
-                        ConstraintLayout layout = m.findViewById(R.id.cross_road_inn_layout);
-                        layout.removeView(hero.getHeroButton());
-                        layout.removeView(hero.getHeroGif());
+                            }
+                        }
+
+                        else if (hero.getHeroRarity() == HeroRarity.ELITE ) {
+                            if ( m.GoldAmount >= 100) {
+                                m.GoldAmount -= 100;
+                                hireHero(m);
+                                dialog.setMessage("An " + hero.getHeroRarity() + " hero hired and cost 100 GOLD").create().show();
+                            }
+                            else {
+                                dialog.setMessage("Not Enough Gold").create().show();
+                            }
+                        }
+                        else if (hero.getHeroRarity() == HeroRarity.LEGENDARY ) {
+                            if ( m.GoldAmount >= 500) {
+                                m.GoldAmount -= 500;
+                                hireHero(m);
+                                dialog.setMessage("A " + hero.getHeroRarity() + " hero hired and cost 500 GOLD").create().show();
+                            }
+                            else {
+                                dialog.setMessage("Not Enough Gold").create().show();
+                            }
+                        }
+
+
+                        getFragmentManager().beginTransaction().remove(SingleHeroInLobbyFragment.this).commit();
+                    }
+                    else {
+                        dialog.setMessage("Out of Rooms for New Hero").create().show();
                     }
 
-                    getFragmentManager().beginTransaction().remove(SingleHeroInLobbyFragment.this).commit();
                 }
             }
         );
         // Inflate the layout for this fragment
         return view;
+    }
+
+    private void hireHero (MainActivity m) {
+        m.herosHired.add(hero);
+        m.herosAtLobby.remove(hero);
+        TextView Gold = (TextView) m.findViewById(R.id.Gold) ;
+        Gold.setText("Gold : " + m.GoldAmount);
+        TextView totalHeroHired = (TextView)  m.findViewById(R.id.totalHeroHired);
+        totalHeroHired.setText("Total Heroes : " +  m.herosHired.size());
+
+        ConstraintLayout layout = m.findViewById(R.id.cross_road_inn_layout);
+        layout.removeView(hero.getHeroButton());
+        layout.removeView(hero.getHeroGif());
+
+        Log.i("" , "hero At Lobby : " + m.herosAtLobby.size());
     }
 }

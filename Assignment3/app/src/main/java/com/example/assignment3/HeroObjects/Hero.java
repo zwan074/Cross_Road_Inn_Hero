@@ -1,13 +1,15 @@
 package com.example.assignment3.HeroObjects;
 
 import android.graphics.drawable.Drawable;
+import android.os.Parcel;
+import android.os.Parcelable;
 import android.widget.Button;
 
 import java.io.Serializable;
 
 import pl.droidsonroids.gif.GifImageView;
 
-public class Hero implements Serializable {
+public class Hero implements Serializable, Parcelable  {
 
    private HeroRarity heroRarity;
    private String heroName;
@@ -22,110 +24,130 @@ public class Hero implements Serializable {
    private GifImageView heroGif;
    private int heroGifID;
    private Button heroButton;
+   private boolean onQuest;
 
    public Hero() {}
 
-   public int getHeroAttackPowerEnhancement() {
-      return heroAttackPowerEnhancement;
-   }
 
-   public void setHeroAttackPowerEnhancement(int heroAttackPowerEnhancement) {
-      this.heroAttackPowerEnhancement = heroAttackPowerEnhancement;
-   }
+    @Override
+    public int describeContents() {
+        return 0;
+    }
 
-   public int getHeroDefencePowerEnhancement() {
-      return heroDefencePowerEnhancement;
-   }
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
 
-   public void setHeroDefencePowerEnhancement(int heroDefencePowerEnhancement) {
-      this.heroDefencePowerEnhancement = heroDefencePowerEnhancement;
-   }
+    }
 
-   public int getHeroGifID() {
-      return heroGifID;
-   }
+    public HeroRarity getHeroRarity() {
+        return heroRarity;
+    }
 
-   public void setHeroGifID(int heroGifID) {
-      this.heroGifID = heroGifID;
-   }
+    public void setHeroRarity(HeroRarity heroRarity) {
+        this.heroRarity = heroRarity;
+    }
 
-   public HeroRarity getHeroRarity() {
-      return heroRarity;
-   }
+    public String getHeroName() {
+        return heroName;
+    }
 
-   public void setHeroRarity(HeroRarity heroRarity) {
-      this.heroRarity = heroRarity;
-   }
+    public void setHeroName(String heroName) {
+        this.heroName = heroName;
+    }
 
-   public String getHeroName() {
-      return heroName;
-   }
+    public HeroClass getHeroClass() {
+        return heroClass;
+    }
 
-   public void setHeroName(String heroName) {
-      this.heroName = heroName;
-   }
+    public void setHeroClass(HeroClass heroClass) {
+        this.heroClass = heroClass;
+    }
 
-   public HeroClass getHeroClass() {
-      return heroClass;
-   }
+    public HeroSkill getHeroSkill() {
+        return heroSkill;
+    }
 
-   public void setHeroClass(HeroClass heroClass) {
-      this.heroClass = heroClass;
-   }
+    public void setHeroSkill(HeroSkill heroSkill) {
+        this.heroSkill = heroSkill;
+    }
 
-   public HeroSkill getHeroSkill() {
-      return heroSkill;
-   }
+    public int getHeroAttackPower() {
+        return heroAttackPower;
+    }
 
-   public void setHeroSkill(HeroSkill heroSkill) {
-      this.heroSkill = heroSkill;
-   }
+    public void setHeroAttackPower(int heroAttackPower) {
+        this.heroAttackPower = heroAttackPower;
+    }
 
-   public int getHeroAttackPower() {
-      return heroAttackPower;
-   }
+    public int getHeroDefencePower() {
+        return heroDefencePower;
+    }
 
-   public void setHeroAttackPower(int heroAttackPower) {
-      this.heroAttackPower = heroAttackPower;
-   }
+    public void setHeroDefencePower(int heroDefencePower) {
+        this.heroDefencePower = heroDefencePower;
+    }
 
-   public int getHeroDefencePower() {
-      return heroDefencePower;
-   }
+    public int getHeroAttackPowerEnhancement() {
+        return heroAttackPowerEnhancement;
+    }
 
-   public void setHeroDefencePower(int heroDefencePower) {
-      this.heroDefencePower = heroDefencePower;
-   }
+    public void setHeroAttackPowerEnhancement(int heroAttackPowerEnhancement) {
+        this.heroAttackPowerEnhancement = heroAttackPowerEnhancement;
+    }
 
-   public int getLevel() {
-      return level;
-   }
+    public int getHeroDefencePowerEnhancement() {
+        return heroDefencePowerEnhancement;
+    }
 
-   public void setLevel(int level) {
-      this.level = level;
-   }
+    public void setHeroDefencePowerEnhancement(int heroDefencePowerEnhancement) {
+        this.heroDefencePowerEnhancement = heroDefencePowerEnhancement;
+    }
 
-   public int getExp() {
-      return exp;
-   }
+    public int getLevel() {
+        return level;
+    }
 
-   public void setExp(int exp) {
-      this.exp = exp;
-   }
+    public void setLevel(int level) {
+        this.level = level;
+    }
 
-   public GifImageView getHeroGif() {
-      return heroGif;
-   }
+    public int getExp() {
+        return exp;
+    }
 
-   public void setHeroGif(GifImageView heroGif) {
-      this.heroGif = heroGif;
-   }
+    public void setExp(int exp) {
+        this.exp = exp;
+    }
 
-   public Button getHeroButton() {
-      return heroButton;
-   }
+    public GifImageView getHeroGif() {
+        return heroGif;
+    }
 
-   public void setHeroButton(Button heroButton) {
-      this.heroButton = heroButton;
-   }
+    public void setHeroGif(GifImageView heroGif) {
+        this.heroGif = heroGif;
+    }
+
+    public int getHeroGifID() {
+        return heroGifID;
+    }
+
+    public void setHeroGifID(int heroGifID) {
+        this.heroGifID = heroGifID;
+    }
+
+    public Button getHeroButton() {
+        return heroButton;
+    }
+
+    public void setHeroButton(Button heroButton) {
+        this.heroButton = heroButton;
+    }
+
+    public boolean isOnQuest() {
+        return onQuest;
+    }
+
+    public void setOnQuest(boolean onQuest) {
+        this.onQuest = onQuest;
+    }
 }
