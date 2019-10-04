@@ -14,13 +14,16 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assignment3.QuestObjects.Quest;
 import com.example.assignment3.QuestObjects.QuestDifficulty;
+import com.example.assignment3.QuestObjects.QuestStatus;
 
 import java.util.Date;
 import java.util.stream.Collectors;
 
 public class QuestMenuFragment extends Fragment {
 
-    static final long THRITY_MIN = 1000 * 60 * 30 ;
+    static final long THIRTY_MIN = 1000 * 60 * 30 ;
+    static final long TWO_HOURS = 1000 * 60 * 60 * 2 ;
+    static final long ONE_DAY = 1000 * 60 * 60 * 24 ;
 
     @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
@@ -56,7 +59,8 @@ public class QuestMenuFragment extends Fragment {
         if ( numberOfNormalQuests < 5  ) {
             for (int i = 0 ; i < 5 - numberOfNormalQuests; i++ ){
                 Quest newNormalQuest = new Quest();
-                newNormalQuest.setQuestDuration(THRITY_MIN);
+                newNormalQuest.setQuestDuration(THIRTY_MIN);
+                newNormalQuest.setQuestStatus(QuestStatus.IDLE);
                 newNormalQuest.setHeroDeathRate(0);
                 newNormalQuest.setNumberOfMobs((int) (Math.random() * 100  + 20));
                 newNormalQuest.setQuestDifficulty(QuestDifficulty.NORMAL);
@@ -76,7 +80,8 @@ public class QuestMenuFragment extends Fragment {
         if ( numberOfEliteQuests < 4  ) {
             for (int i = 0 ; i < 4 - numberOfEliteQuests; i++ ){
                 Quest newEliteQuest = new Quest();
-                newEliteQuest.setQuestDuration(THRITY_MIN);
+                newEliteQuest.setQuestDuration(TWO_HOURS);
+                newEliteQuest.setQuestStatus(QuestStatus.IDLE);
                 newEliteQuest.setHeroDeathRate(10);
                 newEliteQuest.setNumberOfMobs((int) (Math.random() * 200  + 50));
                 newEliteQuest.setQuestDifficulty(QuestDifficulty.ELITE);
@@ -96,8 +101,9 @@ public class QuestMenuFragment extends Fragment {
         if ( numberOfLegendaryQuests < 1  ) {
 
             Quest newLegendaryQuest = new Quest();
-            newLegendaryQuest.setQuestDuration(THRITY_MIN);
-            newLegendaryQuest.setHeroDeathRate(10);
+            newLegendaryQuest.setQuestDuration(ONE_DAY);
+            newLegendaryQuest.setQuestStatus(QuestStatus.IDLE);
+            newLegendaryQuest.setHeroDeathRate(20);
             newLegendaryQuest.setNumberOfMobs((int) (Math.random() * 300  + 100));
             newLegendaryQuest.setQuestDifficulty(QuestDifficulty.LEGENDARY);
             newLegendaryQuest.setNumberOfNormalBosses((int) (Math.random() * 100 % 45));

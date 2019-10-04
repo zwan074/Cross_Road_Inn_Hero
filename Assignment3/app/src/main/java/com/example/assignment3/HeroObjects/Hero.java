@@ -1,6 +1,5 @@
 package com.example.assignment3.HeroObjects;
 
-import android.graphics.drawable.Drawable;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.widget.Button;
@@ -25,18 +24,19 @@ public class Hero implements Serializable, Parcelable  {
    private int heroGifID;
    private Button heroButton;
    private boolean onQuest;
+   private boolean inQuest;
 
    public Hero() {}
 
 
-    @Override
-    public int describeContents() {
-        return 0;
+
+
+    public boolean isInQuest() {
+        return inQuest;
     }
 
-    @Override
-    public void writeToParcel(Parcel parcel, int i) {
-
+    public void setInQuest(boolean inQuest) {
+        this.inQuest = inQuest;
     }
 
     public HeroRarity getHeroRarity() {
@@ -149,5 +149,49 @@ public class Hero implements Serializable, Parcelable  {
 
     public void setOnQuest(boolean onQuest) {
         this.onQuest = onQuest;
+    }
+
+    protected Hero(Parcel in) {
+        heroName = in.readString();
+        heroAttackPower = in.readInt();
+        heroDefencePower = in.readInt();
+        heroAttackPowerEnhancement = in.readInt();
+        heroDefencePowerEnhancement = in.readInt();
+        level = in.readInt();
+        exp = in.readInt();
+        heroGifID = in.readInt();
+        onQuest = in.readByte() != 0;
+        inQuest = in.readByte() != 0;
+    }
+
+    public static final Creator<Hero> CREATOR = new Creator<Hero>() {
+        @Override
+        public Hero createFromParcel(Parcel in) {
+            return new Hero(in);
+        }
+
+        @Override
+        public Hero[] newArray(int size) {
+            return new Hero[size];
+        }
+    };
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeString(heroName);
+        parcel.writeInt(heroAttackPower);
+        parcel.writeInt(heroDefencePower);
+        parcel.writeInt(heroAttackPowerEnhancement);
+        parcel.writeInt(heroDefencePowerEnhancement);
+        parcel.writeInt(level);
+        parcel.writeInt(exp);
+        parcel.writeInt(heroGifID);
+        parcel.writeByte((byte) (onQuest ? 1 : 0));
+        parcel.writeByte((byte) (inQuest ? 1 : 0));
     }
 }

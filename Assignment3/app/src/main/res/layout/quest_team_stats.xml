@@ -5,14 +5,22 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_centerVertical="true"
-    android:orientation="vertical"
     android:background="#CC76FF03"
+    android:orientation="vertical"
     android:translationZ="2dp">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Hero1_layout"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <Button
@@ -89,7 +97,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Hero2_layout"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <Button
@@ -154,7 +162,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/Hero3_layout"
         android:layout_width="match_parent"
-        android:layout_height="90dp"
+        android:layout_height="wrap_content"
         android:layout_weight="1">
 
         <Button
@@ -216,11 +224,13 @@
             app:layout_constraintVertical_bias="0.11" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="150dp">
-
-    </TextView>
-
-
+        <TextView
+            android:id="@+id/Quest_Summary"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Quest Summary"
+            android:textColor="#000000"></TextView>
+    </LinearLayout>
+    </ScrollView>
 </LinearLayout>

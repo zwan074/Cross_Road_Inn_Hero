@@ -15,6 +15,7 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import com.example.assignment3.HeroObjects.Hero;
 import com.example.assignment3.HeroObjects.HeroClass;
 import com.example.assignment3.HeroObjects.HeroRarity;
+import com.example.assignment3.HeroObjects.HeroSkill;
 import com.example.assignment3.QuestObjects.Quest;
 
 import java.util.Date;
@@ -63,6 +64,8 @@ public class MainActivity extends AppCompatActivity {
 
             herosHired = (LinkedList<Hero>) savedInstanceState.getSerializable("Hero hired");
             GoldAmount = (int) savedInstanceState.getSerializable("Gold Amount");
+            quests = (LinkedList<Quest>) savedInstanceState.getSerializable("Quest Info");
+            difficultyFactor = savedInstanceState.getInt("Quests Difficulty factor");
         }
 
         cross_road_inn_lobby_layout = findViewById(R.id.cross_road_inn_layout);
@@ -139,6 +142,8 @@ public class MainActivity extends AppCompatActivity {
         Log.i("","OnsavedInstanceState" );
         outState.putSerializable("Hero hired", herosHired);
         outState.putInt("Gold Amount",GoldAmount);
+        outState.putInt("Quests Difficulty factor",difficultyFactor);
+        outState.putSerializable("Quest Info",quests);
         heroEnterInn.interrupt();
     }
 
@@ -164,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
         hero.setHeroName(generateHeroName((int) (Math.random() * 100) % 4 + 3));
 
         hero.setHeroRarity(HeroRarity.NORMAL);
-        hero.setHeroSkill(null);
+        hero.setHeroSkill(HeroSkill.EMPTY);
         hero.setHeroAttackPower(rand.nextInt((10 - 1) + 1) + 1);
         hero.setHeroDefencePower(rand.nextInt((10 - 1) + 1) + 1);
         hero.setHeroAttackPowerEnhancement(0);
@@ -193,7 +198,14 @@ public class MainActivity extends AppCompatActivity {
         hero.setHeroName(generateHeroName((int) (Math.random() * 100) % 4 + 3));
 
         hero.setHeroRarity(HeroRarity.ELITE);
-        hero.setHeroSkill(null); //0.2 chance has skill
+        if (Math.random() > 0.8) {
+            switch(heroClass) {
+                case 0: hero.setHeroSkill(HeroSkill.CLEAVE)  ;break;
+                case 1: hero.setHeroSkill(HeroSkill.FIREBALL)  ;break;
+                case 2: hero.setHeroSkill(HeroSkill.HEAL)  ;break;
+            }
+        }else { hero.setHeroSkill(HeroSkill.EMPTY); }
+
         hero.setHeroAttackPower(rand.nextInt((15 - 5) + 1) + 5);
         hero.setHeroDefencePower(rand.nextInt((15 - 5) + 1) + 5);
         hero.setHeroAttackPowerEnhancement(0);
@@ -219,7 +231,11 @@ public class MainActivity extends AppCompatActivity {
         hero.setHeroName(generateHeroName((int) (Math.random() * 100) % 4 + 3));
 
         hero.setHeroRarity(HeroRarity.LEGENDARY);
-        hero.setHeroSkill(null); //1.0 chance has skill
+        switch(heroClass) {
+            case 0: hero.setHeroSkill(HeroSkill.CLEAVE)  ;break;
+            case 1: hero.setHeroSkill(HeroSkill.FIREBALL)  ;break;
+            case 2: hero.setHeroSkill(HeroSkill.HEAL)  ;break;
+        }
         hero.setHeroAttackPower(rand.nextInt((20 - 10) + 1) + 10);
         hero.setHeroDefencePower(rand.nextInt((20 - 10) + 1) + 10);
         hero.setHeroAttackPowerEnhancement(0);
