@@ -47,7 +47,6 @@ public class QuestMenuFragment extends Fragment {
 
     }
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     private void generateQuests () {
 
         MainActivity m = (MainActivity) getActivity();

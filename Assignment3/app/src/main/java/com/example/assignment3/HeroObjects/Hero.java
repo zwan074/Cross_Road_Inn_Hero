@@ -20,9 +20,9 @@ public class Hero implements Serializable, Parcelable  {
    private int heroDefencePowerEnhancement;
    private int level;
    private int exp;
-   private GifImageView heroGif;
+   private transient GifImageView heroGif;
    private int heroGifID;
-   private Button heroButton;
+   private transient Button heroButton;
    private boolean onQuest;
    private boolean inQuest;
 

@@ -1,8 +1,8 @@
 package com.example.assignment3;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
@@ -18,6 +18,11 @@ import com.example.assignment3.HeroObjects.HeroRarity;
 import com.example.assignment3.HeroObjects.HeroSkill;
 import com.example.assignment3.QuestObjects.Quest;
 
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
@@ -60,12 +65,19 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Log.i("","OnCreate");
+
+        Boolean continuePlay = getIntent().getBooleanExtra("continue play previous game",true);
+        if (continuePlay) {
+            readGameStateFile();
+        }
+
         if (savedInstanceState != null) {
 
             herosHired = (LinkedList<Hero>) savedInstanceState.getSerializable("Hero hired");
             GoldAmount = (int) savedInstanceState.getSerializable("Gold Amount");
             quests = (LinkedList<Quest>) savedInstanceState.getSerializable("Quest Info");
             difficultyFactor = savedInstanceState.getInt("Quests Difficulty factor");
+
         }
 
         cross_road_inn_lobby_layout = findViewById(R.id.cross_road_inn_layout);
@@ -145,6 +157,47 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("Quests Difficulty factor",difficultyFactor);
         outState.putSerializable("Quest Info",quests);
         heroEnterInn.interrupt();
+
+        savingGameStateFile ();
+
+    }
+
+    private void savingGameStateFile () {
+
+        try {
+            FileOutputStream fileOutputStream = this.openFileOutput("GameSavings.dat", Context.MODE_PRIVATE);
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(fileOutputStream);
+
+            objectOutputStream.writeObject(herosHired);
+            objectOutputStream.writeObject(quests);
+            objectOutputStream.writeObject(GoldAmount);
+            objectOutputStream.writeObject(difficultyFactor);
+
+            objectOutputStream.close();
+            fileOutputStream.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void readGameStateFile () {
+
+        try {
+            FileInputStream fileInputStream = this.openFileInput("GameSavings.dat");
+            ObjectInputStream objectInputStream = new ObjectInputStream(fileInputStream);
+
+            herosHired = (LinkedList<Hero>) objectInputStream.readObject();
+            quests = (LinkedList<Quest>) objectInputStream.readObject();
+            GoldAmount = (int) objectInputStream.readObject();
+            difficultyFactor = (int) objectInputStream.readObject();
+
+            objectInputStream.close();
+            fileInputStream.close();
+        } catch (IOException | ClassNotFoundException e) {
+            e.printStackTrace();
+        }
+
     }
 
     private void initOneHeroInLobby () {

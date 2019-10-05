@@ -10,8 +10,8 @@
         android:layout_width="100dp"
         android:layout_height="60dp"
         android:layout_marginStart="20dp"
-        android:layout_marginLeft="20dp"
         android:layout_weight="1"
+        android:clickable="false"
         android:text="CompleteNow"
         app:layout_constraintStart_toEndOf="@+id/QuestInfo"
         app:layout_constraintTop_toBottomOf="@+id/Start" />

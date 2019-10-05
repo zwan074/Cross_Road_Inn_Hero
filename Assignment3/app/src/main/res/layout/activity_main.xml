@@ -93,7 +93,7 @@
         app:layout_constraintVertical_bias="0.877"
         tools:visibility="visible" />
 
-    <SurfaceView
+    <ImageView
         android:id="@+id/cross_road_inn"
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -121,6 +121,7 @@
         android:id="@+id/totalHeroHired"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#CC2979FF"
         android:text="Total Hero:"
         android:textColor="#FF1744"
         app:layout_constraintBottom_toBottomOf="@+id/Gold"
@@ -134,6 +135,7 @@
         android:id="@+id/Gold"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:background="#CC2979FF"
         android:text="Gold"
         android:textColor="#FF1744"
         app:layout_constraintBottom_toBottomOf="@+id/goldIcon"
