@@ -1,5 +1,5 @@
 # Cross_Road_Inn_Hero
-This is a simulation & strategy game which is developed based on Anroid Platform without many external lib. 
+This is a simulation & strategy game which is developed based on Android Platform without many external lib. 
 
 -Documentation Link : https://github.com/zwan074/Cross_Road_Inn_Hero/blob/master/Documentation.pdf
 
