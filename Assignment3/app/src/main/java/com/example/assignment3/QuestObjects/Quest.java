@@ -2,6 +2,7 @@ package com.example.assignment3.QuestObjects;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import com.example.assignment3.HeroObjects.Hero;
 import com.example.assignment3.HeroObjects.HeroClass;
@@ -37,6 +38,7 @@ public class Quest implements Serializable, Parcelable {
     private int teamDeathRate;
     private double timeDurationReduction;
     private long initQuestDuration;
+    private boolean notified;
 
     static final long THIRTY_MIN = 1000 * 60 * 30 ;
     static final long TWO_HOURS = 1000 * 60 * 60 * 2 ;
@@ -85,8 +87,8 @@ public class Quest implements Serializable, Parcelable {
             teamDeathRate -= 5;
         }
 
-        double questSuccessRate = teamAttackPower/enemyPower;
-
+        double questSuccessRate = (double) teamAttackPower/enemyPower;
+        Log.i("", "" + teamAttackPower + " " + enemyPower + " " + questSuccessRate);
         this.setQuestDuration((long) (initQuestDuration * ( 1 - timeDurationReduction)));
         this.setQuestDeathRate((double) (teamDeathRate <= 0 ? 0 :  teamDeathRate));
         this.setQuestSuccessRate(questSuccessRate >=1 ? 1 : questSuccessRate);
@@ -96,7 +98,7 @@ public class Quest implements Serializable, Parcelable {
                 "Team Defence Power : " +  teamDefencePower + "\n" +
                 "Enemy Power : " + enemyPower + "\n" +
                 "Team Death Rate : " +  teamDeathRate + "%\n" +
-                "Quest Success  Rate : " +  questSuccessRate * 100 + "%";
+                "Quest Success  Rate : " +  String.format("%.2f", questSuccessRate * 100) + "%";
     }
 
     private void computeHeroSkill (Hero hero) {
@@ -124,6 +126,14 @@ public class Quest implements Serializable, Parcelable {
         int numberOfPriest = (int) heroCombo.stream().filter(e -> e == HeroClass.PRIEST).count();
 
         return numberOfWarrior == 1 && numberOfMage == 1 && numberOfPriest == 1 ;
+    }
+
+    public boolean isNotified() {
+        return notified;
+    }
+
+    public void setNotified(boolean notified) {
+        this.notified = notified;
     }
 
     public QuestStatus getQuestStatus() {

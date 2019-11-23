@@ -2,6 +2,9 @@ package com.example.assignment3;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.Context;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
@@ -11,6 +14,7 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.assignment3.HeroObjects.Hero;
@@ -60,6 +64,8 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
     // Replace the contents of a view (invoked by the layout manager)
     @Override
     public void onBindViewHolder(final QuestMenuAdapter.MyViewHolder holder, final int position) {
+
+        //initialise components in this item
         final Quest questSelected = quests.get(position);
         MainActivity m = (MainActivity) activity;
 
@@ -125,6 +131,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         Log.i("", " quest status : " + questSelected.getQuestStatus());
         Log.i("", " quest hero : " + questHero1 + " " + questHero2 + " " + questHero3);
 
+        // Start and complete quest logic
         Button startQuest = holder.layout.findViewById(R.id.Start);
         startQuest.setClickable(false);
         if ( questSelected.getQuestStatus() == QuestStatus.IDLE  ) {
@@ -142,6 +149,9 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
                     if (questHero1 != null) questHero1.setInQuest(true);
                     if (questHero2 != null) questHero2.setInQuest(true);
                     if (questHero3 != null) questHero3.setInQuest(true);
+                    hero1.setClickable(false);
+                    hero2.setClickable(false);
+                    hero3.setClickable(false);
                     //Log.i("", " quest hero : " + questHero1 + " " + questHero2 + " " + questHero3);
                     notifyItemChanged(position);
                 });
@@ -152,12 +162,22 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
 
             startQuest.setText( "" + getDayMinSecDuration(finishTime - timeNow) );
             startQuest.setClickable(false);
+
+            hero1.setClickable(false);
+            hero2.setClickable(false);
+            hero3.setClickable(false);
+
         }
         else if ( questSelected.getQuestStatus() == QuestStatus.ONGOING && finishTime <= timeNow   )   {
 
             startQuest.setText( "COMPLETE" );
-            questSelected.setQuestStatus(QuestStatus.COMPLETE);
             startQuest.setClickable(true);
+
+            hero1.setClickable(false);
+            hero2.setClickable(false);
+            hero3.setClickable(false);
+
+
             if ( Math.random() <= questSelected.getQuestSuccessRate()) {
                 startQuest.setOnClickListener(v-> {
 
@@ -171,6 +191,8 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
                 });
             }
         }
+
+        //dummy button to complete quest immediately for testing
         Button completeNow = holder.layout.findViewById(R.id.CompleteNow);
         completeNow.setClickable(false);
         if ( questSelected.getQuestStatus() == QuestStatus.ONGOING) {
@@ -193,7 +215,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         }
     }
 
-
+    // logic for quest success after completion
     private void completeSuccessQuest (Hero questHero1, Hero questHero2 ,Hero questHero3,
                                        Quest questSelected, MainActivity m, int position) {
 
@@ -234,11 +256,12 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
                 "Gold Reward: " +  questSelected.getGoldReward() + "\n" +
                 "Exp Reward: " +  questSelected.getExpReward() + "\n" ).create().show();
 
-        quests.set(position, generateQuest (quests.get(position)));
+        quests.set(position, generateReplacementQuest (quests.get(position)));
         notifyItemChanged(position);
 
     }
 
+    // logic for quest fail after completion
     private void completeFailQuest (Hero questHero1, Hero questHero2 ,Hero questHero3,
                           Quest questSelected, MainActivity m, int position) {
 
@@ -283,18 +306,18 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
                 (hero1Dead  ?
                         questSelected.getQuestHero1().getHeroRarity() + " "  +
                         questSelected.getQuestHero1().getHeroClass() + " " +
-                        questSelected.getQuestHero1().getHeroName() + " was dead in Quest\n  ": "" ) +
+                        questSelected.getQuestHero1().getHeroName() + " was dead in Quest\n": "" ) +
                 (hero2Dead  ?
                         questSelected.getQuestHero2().getHeroRarity() + " "  +
                         questSelected.getQuestHero2().getHeroClass() + " " +
-                        questSelected.getQuestHero2().getHeroName() + " was dead in Quest\n  ": "" ) +
+                        questSelected.getQuestHero2().getHeroName() + " was dead in Quest\n": "" ) +
                 (hero3Dead  ?
                         questSelected.getQuestHero3().getHeroRarity() + " "  +
                         questSelected.getQuestHero3().getHeroClass() + " " +
-                        questSelected.getQuestHero3().getHeroName() + " was dead in Quest\n  ": "" )
+                        questSelected.getQuestHero3().getHeroName() + " was dead in Quest\n": "" )
                 ).create().show();
 
-        quests.set(position, generateQuest (quests.get(position)));
+        quests.set(position, generateReplacementQuest (quests.get(position)));
         notifyItemChanged(position);
 
 
@@ -303,7 +326,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
     }
 
 
-
+    // open fragment for pick up heroes for selected quest
     private void openQuestForHeroSelectionFragment(MainActivity m, Quest questSelected, int heroPosition ) {
 
         Bundle bundle = new Bundle();
@@ -322,6 +345,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         return quests.size();
     }
 
+    //transfer time format
     private String getDayMinSecDuration ( long time) {
 
         long days = TimeUnit.MILLISECONDS.toDays(time);
@@ -330,7 +354,9 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
 
         return  days + " day " + hours + " hrs " + minutes + " mins";
     }
-    private Quest generateQuest (Quest quest) {
+
+    //generate a replacement quest after completion of existing quest
+    private Quest generateReplacementQuest (Quest quest) {
 
         MainActivity m = (MainActivity) activity;
         Log.i("","Generate New Quest?");
@@ -338,6 +364,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         if ( quest.getQuestDifficulty() == QuestDifficulty.NORMAL  ) {
 
             Quest newNormalQuest = new Quest();
+            newNormalQuest.setQuestName(quest.getQuestName());
             newNormalQuest.setQuestDuration(THIRTY_MIN);
             newNormalQuest.setQuestStatus(QuestStatus.IDLE);
             newNormalQuest.setHeroDeathRate(0);
@@ -357,6 +384,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         else if ( quest.getQuestDifficulty() == QuestDifficulty.ELITE  ) {
 
             Quest newEliteQuest = new Quest();
+            newEliteQuest.setQuestName(quest.getQuestName());
             newEliteQuest.setQuestDuration(TWO_HOURS);
             newEliteQuest.setQuestStatus(QuestStatus.IDLE);
             newEliteQuest.setHeroDeathRate(10);
@@ -378,6 +406,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
         else if (quest.getQuestDifficulty() == QuestDifficulty.LEGENDARY  ) {
 
             Quest newLegendaryQuest = new Quest();
+            newLegendaryQuest.setQuestName(quest.getQuestName());
             newLegendaryQuest.setQuestDuration(ONE_DAY);
             newLegendaryQuest.setQuestStatus(QuestStatus.IDLE);
             newLegendaryQuest.setHeroDeathRate(20);
@@ -399,4 +428,7 @@ public class QuestMenuAdapter extends RecyclerView.Adapter<QuestMenuAdapter.MyVi
 
         return null;
     }
+
+
+
 }

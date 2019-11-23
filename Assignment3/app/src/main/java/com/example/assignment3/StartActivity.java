@@ -14,6 +14,7 @@ public class StartActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        //starting activity choose NEW GAME or load saving file for CONTINUE PLAY
         setContentView(R.layout.game_start_activity);
         ConstraintLayout startLayout = findViewById(R.id.game_start_menu);
 

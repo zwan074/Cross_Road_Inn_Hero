@@ -16,6 +16,8 @@ public class CrossRoadInnRoomsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        //fragment for manage and manipulate recruited heroes
         View view = inflater.inflate(R.layout.cross_road_inn_rooms, container, false);
         MainActivity m = (MainActivity) getActivity();
 
@@ -30,6 +32,7 @@ public class CrossRoadInnRoomsFragment extends Fragment {
         TextView totalGold = m.findViewById(R.id.Gold);
         totalGold.setText("Gold : " +  m.GoldAmount);
 
+        //pass variables and set up adapter
         CrossRoadInnRoomsAdapter madapter = new CrossRoadInnRoomsAdapter(m.herosHired ,m) ;
 
         RecyclerView recyclerView  = view.findViewById(R.id.HeroInfoRecyclerView);

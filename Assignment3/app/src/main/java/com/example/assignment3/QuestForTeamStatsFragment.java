@@ -29,6 +29,7 @@ public class QuestForTeamStatsFragment extends Fragment{
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //initialise component in this fragment
         view = inflater.inflate(R.layout.quest_team_stats, container, false);
         activity = (MainActivity) getActivity();
         quest = (Quest) this.getArguments().getSerializable("Quest For Team Stats");
@@ -55,10 +56,12 @@ public class QuestForTeamStatsFragment extends Fragment{
         Button hero3DP = view.findViewById(R.id.Hero3_enhanceDP);
         Button hero3RemoveThis = view.findViewById(R.id.Remove_Hero3);
 
+        //add or remove heroes
         if (quest.getQuestHero1()!=null) setComponents( quest.getQuestHero1(),hero1Layout,hero1GIF,hero1Info,hero1AP,hero1DP,hero1RemoveThis,1);
         if (quest.getQuestHero2()!=null) setComponents( quest.getQuestHero2(),hero2Layout,hero2GIF,hero2Info,hero2AP,hero2DP,hero2RemoveThis,2);
         if (quest.getQuestHero3()!=null) setComponents( quest.getQuestHero3(),hero3Layout,hero3GIF,hero3Info,hero3AP,hero3DP,hero3RemoveThis,3);
 
+        //close fragment
         ImageButton closeTeamStats = view.findViewById(R.id.close_quest_team_stats);
         closeTeamStats.setOnClickListener(v->{
             //activity.getSupportFragmentManager().beginTransaction().replace(R.id.cross_road_inn_layout, new QuestMenuFragment()).commit()
@@ -67,12 +70,14 @@ public class QuestForTeamStatsFragment extends Fragment{
             }
         );
 
+        //refreshing quest summary after hero has been added or removed
         TextView questSummary =view.findViewById(R.id.Quest_Summary);
         questSummary.setText(quest.getQuestSummary ());
 
         return view;
     }
 
+    //logic for set up a single hero component in this fragment
     private void setComponents (Hero hero , ConstraintLayout heroLayout, GifImageView heroGIF ,
                                 TextView heroInfo, Button AP, Button DP, Button removeHero, int questHero ) {
 
@@ -99,25 +104,25 @@ public class QuestForTeamStatsFragment extends Fragment{
         if (!hero.isInQuest()) {
             removeHero.setClickable(true);
             removeHero.setOnClickListener(v->
-                    {
-                        hero.setOnQuest(false);
-                        switch (questHero) {
-                            case 1 : quest.setQuestHero1(null);break;
-                            case 2 : quest.setQuestHero2(null);break;
-                            case 3 : quest.setQuestHero3(null);break;
-                        }
+                {
+                    hero.setOnQuest(false);
+                    switch (questHero) {
+                        case 1 : quest.setQuestHero1(null);break;
+                        case 2 : quest.setQuestHero2(null);break;
+                        case 3 : quest.setQuestHero3(null);break;
+                    }
 
 
-                        heroLayout.setBackgroundColor(0);
-                        heroInfo.setText("");
-                        heroGIF.setImageResource(android.R.drawable.star_big_on);
-                        AP.setText("AP+");
-                        DP.setText("DP+");
-                        removeHero.setClickable(false);
-                        TextView questSummary =view.findViewById(R.id.Quest_Summary);
-                        questSummary.setText(quest.getQuestSummary ());
-                        questMenuAdapter.notifyDataSetChanged();
-                    });
+                    heroLayout.setBackgroundColor(0);
+                    heroInfo.setText("");
+                    heroGIF.setImageResource(android.R.drawable.star_big_on);
+                    AP.setText("AP+");
+                    DP.setText("DP+");
+                    removeHero.setClickable(false);
+                    TextView questSummary =view.findViewById(R.id.Quest_Summary);
+                    questSummary.setText(quest.getQuestSummary ());
+                    questMenuAdapter.notifyDataSetChanged();
+                });
         }
 
 

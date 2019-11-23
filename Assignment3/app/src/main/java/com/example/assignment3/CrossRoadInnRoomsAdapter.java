@@ -47,6 +47,8 @@ public class CrossRoadInnRoomsAdapter extends RecyclerView.Adapter<CrossRoadInnR
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+        //initialise components in this item
         final Hero heroSelected = heroHired.get(position);
 
         switch (heroSelected.getHeroRarity()) {
@@ -70,6 +72,7 @@ public class CrossRoadInnRoomsAdapter extends RecyclerView.Adapter<CrossRoadInnR
                 "EXP: " + heroSelected.getExp()
         );
 
+        //hero AP enhancement logic
         final Button heroAP = holder.layout.findViewById(R.id.enhanceAP);
         heroAP.setText("AP+" +heroSelected.getHeroAttackPowerEnhancement());
         heroAP.setOnClickListener(view -> {
@@ -104,6 +107,7 @@ public class CrossRoadInnRoomsAdapter extends RecyclerView.Adapter<CrossRoadInnR
 
         });
 
+        //hero DP enhancement logic
         final Button heroDP = holder.layout.findViewById(R.id.enhanceDP);
         heroDP.setText("DP+" +heroSelected.getHeroDefencePowerEnhancement());
         heroDP.setOnClickListener(view -> {
@@ -138,7 +142,7 @@ public class CrossRoadInnRoomsAdapter extends RecyclerView.Adapter<CrossRoadInnR
 
         });
 
-
+        //fire hero from list
         Button fireHero = holder.layout.findViewById(R.id.fireHero);
         if (!heroSelected.isOnQuest()) {
             fireHero.setOnClickListener(view -> {

@@ -1,7 +1,14 @@
 package com.example.assignment3;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.TaskStackBuilder;
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
+import android.provider.Telephony;
 import android.util.Log;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -11,21 +18,25 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.app.NotificationCompat;
 
 import com.example.assignment3.HeroObjects.Hero;
 import com.example.assignment3.HeroObjects.HeroClass;
 import com.example.assignment3.HeroObjects.HeroRarity;
 import com.example.assignment3.HeroObjects.HeroSkill;
 import com.example.assignment3.QuestObjects.Quest;
+import com.example.assignment3.QuestObjects.QuestStatus;
 
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.LinkedList;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 import pl.droidsonroids.gif.GifImageView;
 
@@ -51,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
     Button pos4;
 
     Thread heroEnterInn;
+    Thread questsCompletionNotification;
 
     public int getGoldAmount() {
         return GoldAmount;
@@ -66,11 +78,12 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Log.i("","OnCreate");
 
+        //load game saving file for CONTINUE PLAY
         Boolean continuePlay = getIntent().getBooleanExtra("continue play previous game",true);
         if (continuePlay) {
             readGameStateFile();
         }
-
+        //restore game state if rotation of device
         if (savedInstanceState != null) {
 
             herosHired = (LinkedList<Hero>) savedInstanceState.getSerializable("Hero hired");
@@ -80,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
 
+        //game logic for load all existing components for the inn.
         cross_road_inn_lobby_layout = findViewById(R.id.cross_road_inn_layout);
 
         inn_boss = findViewById(R.id.inn_boss);
@@ -112,6 +126,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("", "onResume");
+
+        //game logic for generate random heroes arrive and leave the inn
         heroEnterInn = new Thread(new Runnable() {
             @Override
             synchronized public void run() {
@@ -122,7 +138,8 @@ public class MainActivity extends AppCompatActivity {
                         e.printStackTrace();
                         break;
                     }
-                    //Log.i("", "Thread name " + Thread.currentThread().getName());
+
+                    //Log.i("", "Thread name " + Thread.currentThread().getId());
                     if (herosAtLobby.size () < 10 && Math.random() > 0.6) {
                         try {
                             Thread.sleep(500);
@@ -143,12 +160,37 @@ public class MainActivity extends AppCompatActivity {
 
 
             }
-        });
+        }, "hero enter inn");
+
+        questsCompletionNotification = new Thread(new Runnable() {
+            @Override
+            synchronized public void run() {
+                while (true) {
+                    try {
+                        Thread.sleep(500);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                        break;
+                    }
+                    questsCompletionNotification ();
+                }
+            }
+
+        }, "quest completion notification");
+
+        //attach a monitor for quest completion to send notifications
+        if ( !Thread.getAllStackTraces().keySet().stream().anyMatch(e-> e.getName() == "quest completion notification")) {
+            questsCompletionNotification.start();
+        }
 
         heroEnterInn.start();
+
+
+
     }
 
     @Override
+    // record game state and saving game file
     protected void onSaveInstanceState(@NonNull Bundle outState) {
         super.onSaveInstanceState(outState);
         Log.i("","OnsavedInstanceState" );
@@ -156,12 +198,14 @@ public class MainActivity extends AppCompatActivity {
         outState.putInt("Gold Amount",GoldAmount);
         outState.putInt("Quests Difficulty factor",difficultyFactor);
         outState.putSerializable("Quest Info",quests);
+
         heroEnterInn.interrupt();
 
         savingGameStateFile ();
 
     }
 
+    //game file saving logic
     private void savingGameStateFile () {
 
         try {
@@ -181,6 +225,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //game file reading logic
     private void readGameStateFile () {
 
         try {
@@ -200,6 +245,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //create a hero in inn lobby
     private void initOneHeroInLobby () {
 
         int heroRarity = (int) (Math.random() * 100) % 3;
@@ -212,6 +258,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // create a random normal hero
     private void generateNormalHero () {
 
         Random rand = new Random();
@@ -240,7 +287,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // create a random elite hero
     private void generateEliteHero () {
 
         Random rand = new Random();
@@ -274,6 +321,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    // create a random legendary hero
     private void generateLegendaryHero () {
 
         Random rand = new Random();
@@ -306,6 +354,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
+    //set a hero's GIF image and his button.
     private void setHeroGIFImageViewAndButton (int heroClass, int heroGIF, GifImageView GifImageView , final Hero hero) {
 
         Button heroButton = new Button(this);
@@ -368,7 +417,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // hero enter the door of inn and start random move
     private void HeroEnterInnAnimation (final GifImageView heroGifImageView, final Button heroButton,
                                           final Date now, final Hero hero ){
 
@@ -395,7 +444,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    // hero random move and leave the inn at certain time
     private Runnable heroRandomWalk(final GifImageView heroGifImageView,
                                     final Button heroButton, final Date now,final Hero hero) {
 
@@ -478,6 +527,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    //generate a random name for hero, downloaded this method from StackOverFlow
     private String generateHeroName(int n)
     {
 
@@ -503,5 +553,53 @@ public class MainActivity extends AppCompatActivity {
         }
 
         return sb.toString();
+    }
+
+    private void questsCompletionNotification () {
+
+        int id = 0;
+        for (Quest e : quests) {
+            long timeNow = new Date().getTime();
+            long finishTime = 0;
+            if (e.getQuestStartTime() != null) {
+                finishTime = e.getQuestStartTime() + e.getQuestDuration();
+            }
+
+            if (e.getQuestStatus() == QuestStatus.ONGOING && finishTime <= timeNow && !e.isNotified()) {
+                Log.i("","quest notification " + e.getQuestName() + " " + finishTime + " " + e.getQuestStartTime());
+                SingleQuestCompletionNotification(e,id);
+                e.setNotified(true);
+            }
+            id++;
+
+        }
+
+
+    }
+
+    private void SingleQuestCompletionNotification ( Quest q , int id) {
+
+        NotificationManager nm=(NotificationManager) this.getSystemService(Context.NOTIFICATION_SERVICE);
+
+        String CHANNEL_ID="cross_road_inn";
+        NotificationCompat.Builder mBuilder =
+                new NotificationCompat.Builder(this,CHANNEL_ID)
+                        .setSmallIcon(R.drawable.common_google_signin_btn_icon_light_focused)
+                        .setContentTitle("Cross Road Inn")
+                        .setContentText( q.getQuestName() + " completed\n");
+
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
+            int importance = NotificationManager.IMPORTANCE_HIGH;
+            NotificationChannel notificationChannel = new NotificationChannel(CHANNEL_ID, "Cross Road Inn App", importance);
+            notificationChannel.enableLights(true);
+            notificationChannel.setLightColor(Color.RED);
+            notificationChannel.enableVibration(true);
+            notificationChannel.setVibrationPattern(new long[]{100, 200, 300, 400, 500, 400, 300, 200, 400});
+            nm.createNotificationChannel(notificationChannel);
+        }
+        nm.notify(id,mBuilder.build());
+
+
+
     }
 }

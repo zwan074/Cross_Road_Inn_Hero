@@ -56,6 +56,8 @@ public class QuestForHeroSelectionAdapter extends RecyclerView.Adapter<QuestForH
 
     @Override
     public void onBindViewHolder(final QuestForHeroSelectionAdapter.MyViewHolder holder, final int position) {
+
+        //initialise components in this item
         final Hero heroSelected = heroHired.get(position);
         MainActivity m = (MainActivity) activity;
 
@@ -80,6 +82,8 @@ public class QuestForHeroSelectionAdapter extends RecyclerView.Adapter<QuestForH
                 "EXP: " + heroSelected.getExp()
         );
 
+
+        //pick up a hero from list
         Button pickHero = holder.layout.findViewById(R.id.isOnQuest);
         if (heroSelected.isOnQuest()) {
 
@@ -120,6 +124,7 @@ public class QuestForHeroSelectionAdapter extends RecyclerView.Adapter<QuestForH
             });
         }
 
+        // AP and DP button
         Button heroAP = holder.layout.findViewById(R.id.QuestHeroEnhanceAP);
         heroAP.setText("AP+" +heroSelected.getHeroAttackPowerEnhancement());
 

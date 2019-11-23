@@ -25,14 +25,16 @@ public class QuestMenuFragment extends Fragment {
     static final long TWO_HOURS = 1000 * 60 * 60 * 2 ;
     static final long ONE_DAY = 1000 * 60 * 60 * 24 ;
 
-    @RequiresApi(api = Build.VERSION_CODES.N)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
 
+        //initialise components in this fragment
         View view = inflater.inflate(R.layout.quest_menu, container, false);
         MainActivity m = (MainActivity) getActivity();
+
         generateQuests ();
 
+        //pass variables and set up adapter
         QuestMenuAdapter madapter = new QuestMenuAdapter(m.quests ,m) ;
 
         RecyclerView recyclerView  = view.findViewById(R.id.QuestMenuRecyclerView);
@@ -49,15 +51,18 @@ public class QuestMenuFragment extends Fragment {
 
     private void generateQuests () {
 
+        //generate quests in game
         MainActivity m = (MainActivity) getActivity();
 
         int numberOfNormalQuests =  m.quests.stream().filter(e ->  e.getQuestDifficulty() == QuestDifficulty.NORMAL).collect(Collectors.toList()).size();
         int numberOfEliteQuests = m.quests.stream().filter(e -> e.getQuestDifficulty() == QuestDifficulty.ELITE).collect(Collectors.toList()).size();
         int numberOfLegendaryQuests = m.quests.stream().filter(e -> e.getQuestDifficulty() == QuestDifficulty.LEGENDARY).collect(Collectors.toList()).size();
 
+        // maximum 5 normal quests
         if ( numberOfNormalQuests < 5  ) {
             for (int i = 0 ; i < 5 - numberOfNormalQuests; i++ ){
                 Quest newNormalQuest = new Quest();
+                newNormalQuest.setQuestName("Normal Quest " + i);
                 newNormalQuest.setQuestDuration(THIRTY_MIN);
                 newNormalQuest.setQuestStatus(QuestStatus.IDLE);
                 newNormalQuest.setHeroDeathRate(0);
@@ -75,10 +80,11 @@ public class QuestMenuFragment extends Fragment {
             }
 
         }
-
+        // maximum 4 elite quests
         if ( numberOfEliteQuests < 4  ) {
             for (int i = 0 ; i < 4 - numberOfEliteQuests; i++ ){
                 Quest newEliteQuest = new Quest();
+                newEliteQuest.setQuestName("Elite Quest " + i);
                 newEliteQuest.setQuestDuration(TWO_HOURS);
                 newEliteQuest.setQuestStatus(QuestStatus.IDLE);
                 newEliteQuest.setHeroDeathRate(10);
@@ -96,10 +102,11 @@ public class QuestMenuFragment extends Fragment {
 
             }
         }
-
+        // one legendary quests
         if ( numberOfLegendaryQuests < 1  ) {
 
             Quest newLegendaryQuest = new Quest();
+            newLegendaryQuest.setQuestName("Legendary Quest 1" );
             newLegendaryQuest.setQuestDuration(ONE_DAY);
             newLegendaryQuest.setQuestStatus(QuestStatus.IDLE);
             newLegendaryQuest.setHeroDeathRate(20);

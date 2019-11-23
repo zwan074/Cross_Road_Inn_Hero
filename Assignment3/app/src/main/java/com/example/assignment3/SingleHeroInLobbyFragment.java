@@ -27,6 +27,7 @@ public class SingleHeroInLobbyFragment extends Fragment {
     private Hero hero;
     private View view;
 
+    //pass object to this fragment
     public static SingleHeroInLobbyFragment newInstance(Hero hero) {
 
         SingleHeroInLobbyFragment fragment = new SingleHeroInLobbyFragment();
@@ -41,6 +42,7 @@ public class SingleHeroInLobbyFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
+        //initialise components in this fragment
         hero  = (Hero) getArguments().getSerializable(DESCRIBABLE_KEY);
         view = inflater.inflate(R.layout.single_hero_in_lobby, container, false);
 
@@ -58,6 +60,7 @@ public class SingleHeroInLobbyFragment extends Fragment {
         heroInfo.append("Hero DefencePower: " + hero.getHeroDefencePower()+ "\n");
 
 
+        // set up gold cost for hire hero with different rarity
         switch (hero.getHeroRarity()) {
             case NORMAL: heroInfo.setBackgroundColor(Color.parseColor("#CCDDD1C6"));goldToHire.setText("Gold : 20"  );break;
             case ELITE : heroInfo.setBackgroundColor(Color.parseColor("#CC00E5FF"));goldToHire.setText("Gold : 100"  );break;
@@ -65,22 +68,21 @@ public class SingleHeroInLobbyFragment extends Fragment {
         }
 
 
-
+        //click cross button to close window
         closeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getFragmentManager().beginTransaction().remove(SingleHeroInLobbyFragment.this).commit();
-                //Log.i("","clicked");
-                //getFragmentManager().popBackStack();
+
             }
         });
+
+        // click anywhere to close window
         view.setOnClickListener(
             new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     getFragmentManager().beginTransaction().remove(SingleHeroInLobbyFragment.this).commit();
-                    //Log.i("","clicked");
-                    //getFragmentManager().popBackStack();
                 }
             }
         );
@@ -135,7 +137,7 @@ public class SingleHeroInLobbyFragment extends Fragment {
                 }
             }
         );
-        // Inflate the layout for this fragment
+
         return view;
     }
 
